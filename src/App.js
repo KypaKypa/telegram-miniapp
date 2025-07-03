@@ -1,23 +1,32 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect } from "react";
+import { mountMainButton, mainButtonState } from "@telegram-apps/sdk-react";
 
 function App() {
+  useEffect(() => {
+    // Монтируем кнопку и задаём параметры
+    const mainButton = mountMainButton({
+      text: "Отправить",
+      isVisible: true,
+      isActive: true,
+      onClick: () => {
+        window.Telegram.WebApp.sendData(JSON.stringify({ hello: "world" }));
+      }
+    });
+
+    // Чистим после размонтирования
+    return () => mainButton.unmount();
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div style={{ padding: 24 }}>
+      <h1>Mini App через новую версию SDK</h1>
+      <p>Рабочая кнопка Telegram MainButton.</p>
+      <div>
+        <b>Состояние MainButton:</b>{" "}
+        {mainButtonState.text} |{" "}
+        {mainButtonState.isVisible ? "Видим" : "Скрыт"} |{" "}
+        {mainButtonState.isActive ? "Активен" : "Неактивен"}
+      </div>
     </div>
   );
 }
