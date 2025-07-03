@@ -1,32 +1,29 @@
 import React, { useState, useEffect } from "react";
 
-// Проверка: в Telegram ли мы
 function isTelegram() {
   return window.Telegram && window.Telegram.WebApp;
 }
 
 function getTheme() {
-  // Попробуем получить тему из Telegram
   if (isTelegram()) {
+    // colorScheme может быть "dark" или "light"
     return window.Telegram.WebApp.colorScheme || "light";
   }
-  // Fallback: светлая тема
   return "light";
 }
 
 export default function App() {
   const [theme, setTheme] = useState(getTheme());
 
-  // Подписка на изменение темы в Telegram
   useEffect(() => {
     if (isTelegram()) {
+      // Подписка на изменение темы
       window.Telegram.WebApp.onEvent("themeChanged", () => {
         setTheme(getTheme());
       });
     }
   }, []);
 
-  // Стили под темы
   const colors =
     theme === "dark"
       ? {
@@ -58,9 +55,9 @@ export default function App() {
             background: colors.button,
             color: "#fff",
             border: "none",
-            borderRadius: 10,
+            borderRadius: 18,
             fontWeight: "bold",
-            fontSize: 18,
+            fontSize: 24,
             cursor: "pointer"
           }}
           onClick={() => alert("Форма: Задать вопрос")}
@@ -73,9 +70,9 @@ export default function App() {
             background: "transparent",
             color: colors.button,
             border: `2px solid ${colors.button}`,
-            borderRadius: 10,
+            borderRadius: 18,
             fontWeight: "bold",
-            fontSize: 18,
+            fontSize: 24,
             cursor: "pointer"
           }}
           onClick={() => alert("Форма: Получить консультацию")}
@@ -83,9 +80,7 @@ export default function App() {
           Получить консультацию
         </button>
       </div>
-      <div style={{ opacity: 0.6 }}>
-        <small>Тема: {theme === "dark" ? "тёмная" : "светлая"}</small>
-      </div>
+      {/* Убрали вывод темы */}
     </div>
   );
 }
